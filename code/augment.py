@@ -38,12 +38,25 @@ def gen_eda(train_orig, output_file, alpha, num_aug=9):
 
     for i, line in enumerate(lines):
         parts = line[:-1].split('\t')
-        label = parts[0]
-        sentence = parts[1]
-        aug_sentences = eda(sentence, alpha_sr=alpha, alpha_ri=alpha, alpha_rs=alpha, p_rd=alpha, num_aug=num_aug)
-        for aug_sentence in aug_sentences:
-            writer.write(label + "\t" + aug_sentence + '\n')
-
+        if len(parts) == 2:
+            label = parts[0]
+            sentence = parts[1]
+            aug_sentences = eda(sentence, alpha_sr=alpha, alpha_ri=alpha, alpha_rs=alpha, p_rd=alpha, num_aug=num_aug)
+            for aug_sentence in aug_sentences:
+                writer.write(label + "\t" + aug_sentence + '\n')
+        else:
+            if i == 0:
+                writer.write(f"{line}")
+            else:
+                label = parts[1]
+                sentence = parts[0]
+                is_valid = parts[2]
+                if is_valid == "False":
+                    aug_sentences = eda(sentence, alpha_sr=alpha, alpha_ri=alpha, alpha_rs=alpha, p_rd=alpha, num_aug=num_aug)
+                    for aug_sentence in aug_sentences:
+                        writer.write(label + "\t" + aug_sentence + '\tFalse\n')
+                else:
+                    writer.write(line)
     writer.close()
     print("generated augmented sentences with eda for " + train_orig + " to " + output_file + " with num_aug=" + str(num_aug))
 
