@@ -54,7 +54,7 @@ def gen_eda(train_orig, output_file, alpha, num_aug=9):
                 if is_valid == "False":
                     aug_sentences = eda(sentence, alpha_sr=alpha, alpha_ri=alpha, alpha_rs=alpha, p_rd=alpha, num_aug=num_aug)
                     for aug_sentence in aug_sentences:
-                        writer.write(label + "\t" + aug_sentence + '\tFalse\n')
+                        writer.write(aug_sentence + "\t" + label + '\tFalse\n')
                 else:
                     writer.write(line)
     writer.close()
